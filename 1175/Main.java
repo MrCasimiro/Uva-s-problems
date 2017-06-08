@@ -66,11 +66,33 @@ public class Main {
 		
 		while(!singleMen.isEmpty()) { // while we have single men
 			
-			int single_boy = singleMen.remove(0); //takes the first single men in the list
+			int single_boy = singleMen.get(0); //takes the first single men in the list
 			
 			List<Integer> girlsHeLikes = boysPreferences.get(single_boy);
-			Iterator<Integer> itr = girlsHeLikes.iterator();
+			//Iterator<Integer> itr = girlsHeLikes.iterator();
 			
+			int girl = girlsHeLikes.remove(0); // remove that girl he will ask
+			boysPreferences.put(single_boy, girlsHeLikes); 
+
+
+			if(girlsMatch.get(girl) == -1) { // girl is single
+				girlsMatch.put(girl, single_boy);
+				boysMatch.put(single_boy, girl);
+				singleMen.remove(0);
+					
+			} else { // girl is not single
+					
+				int boyfriend = girlsMatch.get(girl);
+				List<Integer> girlPreferences = girlsPreferences.get(girl);
+				if(girlPreferences.indexOf(boyfriend) > girlPreferences.indexOf(single_boy)) { // she likes single_boy more than she's actual boyfriend, then change
+					girlsMatch.put(girl, single_boy);
+					boysMatch.put(single_boy, girl);
+					singleMen.add(boyfriend);
+					singleMen.remove(0);
+				} 
+			}
+
+			/*
 			while(itr.hasNext()) { // while until we find a match to the single_boy
 				int girl = itr.next();
 				
@@ -92,7 +114,7 @@ public class Main {
 					} 
 					// else do nothing, keep the search
 				}
-			}
+			} */
 		}
 		
 		result(boysMatch);
